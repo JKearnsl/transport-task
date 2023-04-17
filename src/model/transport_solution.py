@@ -1,6 +1,6 @@
 import copy
 
-from src.utils.linear_transport import north_west_corner
+from src.utils.linear_transport import get_solution
 from src.utils.translators import from_fraction_to_float
 from src.utils.validators import is_fractional, is_float
 
@@ -57,8 +57,7 @@ class TransportSolutionModel:
         :return:
         """
         if self._can_solve:
-            north_west_corner(self._a, self._b, self._matrix)
-            self._solution = self._input_table
+            get_solution(self._a, self._b, self._matrix, self._solution)
 
         return self._solution
 
