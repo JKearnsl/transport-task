@@ -57,7 +57,7 @@ class TransportSolutionModel:
         :return:
         """
         if self._can_solve:
-            get_solution(self._a, self._b, self._matrix, self._solution)
+            self._solution = get_solution(self._a, self._b, self._matrix)
 
         return self._solution
 

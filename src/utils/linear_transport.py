@@ -1,64 +1,85 @@
+import copy
 import dataclasses
 
 
-class SolutionTable:
-    a: list[int]
-    b: list[int]
-    solution: list[list['ItemSolutionTable']]
-
-    def __init__(self, a, b, solution):
-        self._a = a
-        self._b = b
-        self._solution = solution
-
-        for i in range(len(self._solution)):
-            for j in range(len(self._solution[i])):
-                self._solution[i][j] = ItemSolutionTable(i, j, cost=self._solution[i][j])
+class Table:
+    def __init__(self, a: list[int], b: list[int], c: list[list[int]]):
+        self._needs = b
+        self._resources = a
+        self._costs: list[list[ItemTable]] = [
+            [ItemTable(i, j, cost=c[i][j]) for j in range(len(b))] for i in range(len(a))
+        ]
 
     @property
     def rows(self) -> int:
-        return len(self._a)
+        return len(self._resources)
 
     @property
     def columns(self) -> int:
-        return len(self._b)
+        return len(self._needs)
 
     @property
-    def a(self) -> list[int]:
-        return self.a
+    def needs(self) -> list[int]:
+        """
+        Строка потребностей (B)
+
+        :return:
+        """
+        return self._needs.copy()
 
     @property
-    def b(self) -> list[int]:
-        return self.b
+    def resources(self) -> list[int]:
+        """
+        Столбец ресурсов (A)
 
-    @a.setter
-    def a(self, value: list[int]):
-        delta = len(value) - len(self._a)
+        :return:
+        """
+        return self._resources.copy()
+
+    @property
+    def costs(self) -> list[list['ItemTable']]:
+        """
+        Таблица стоимостей (C)
+
+        :return:
+        """
+        return self._costs
+
+    @resources.setter
+    def resources(self, value: list[int]):
+        if len(value) < self.rows:
+            raise ValueError('Невозможно уменьшить количество потребностей')
+
+        delta = len(value) - len(self._resources)
         for i in range(delta):
-            self._solution.append([ItemSolutionTable(self.rows + i, j, cost=0) for j in range(self.columns)])
-        self._a = value.copy()
+            self._costs.append([ItemTable(self.rows + i, j, cost=0) for j in range(self.columns)])
+        self._resources = value.copy()
 
-    @b.setter
-    def b(self, value: list[int]):
-        delta = len(value) - len(self._b)
-        for i, row in enumerate(self._solution):
-            row.append([ItemSolutionTable(i, self.columns + j, cost=0) for j in range(delta)])
-        self._b = value.copy()
+    @needs.setter
+    def needs(self, value: list[int]):
+        if len(value) < self.columns:
+            raise ValueError('Невозможно уменьшить количество ресурсов')
 
-    @property
-    def solution(self) -> list[list['ItemSolutionTable']]:
-        return self._solution
+        delta = len(value) - len(self._needs)
+        for i, row in enumerate(self._costs):
+            row.extend([ItemTable(i, self.columns + j, cost=0) for j in range(delta)])
+        self._needs = value.copy()
 
-    @solution.setter
-    def solution(self, value):
-        self._solution = value
+    @costs.setter
+    def costs(self, value):
+        self._costs = value
 
-    def solution_as_list(self) -> list['ItemSolutionTable']:
-        return [item for row in self._solution for item in row if item.amount is not None]
+    def as_list(self) -> list[list[int | None]]:
+        return [
+            [None, *self._needs],
+            *[
+                [self._resources[i], *[item.amount for item in self._costs[i]]] for i in range(self.rows)
+            ]
+        ]
 
 
-class ItemSolutionTable:
-    def __init__(self, row: int, column: int, amount: int = None, cost: int = -1):
+class ItemTable:
+    def __init__(self, row: int, column: int, cost: int, amount: int = None):
         self._row = row
         self._column = column
         self._amount = amount
@@ -80,84 +101,75 @@ class ItemSolutionTable:
     def cost(self) -> int:
         return self._cost
 
-    @amount.setter
-    def amount(self, amount: int) -> None:
-        self._amount = amount
-
     @cost.setter
-    def cost(self, cost: int) -> None:
-        self._cost = cost
+    def cost(self, value: int) -> None:
+        self._cost = value
+
+    @amount.setter
+    def amount(self, value: int) -> None:
+        self._amount = value
 
     def __eq__(self, other) -> bool:
-        return self._row == other.row and self._column == other.column and self._amount == \
-            other.amount and self._cost == other.cost
-
-    def __ne__(self, other) -> bool:
-        return not self == other
+        return hash(self) == hash(other)
 
 
-def balance_task(table: SolutionTable) -> None:
+def balance_table(table: Table) -> None:
     """
-    Балансировка задачи
+    Балансировка таблицы
 
     :param table:
     :return:
     """
 
-    sum_a = sum(table.a)
-    sum_b = sum(table.b)
+    sum_needs = sum(table.needs)
+    sum_resources = sum(table.resources)
 
-    if sum_a == sum_b:
+    if sum_needs == sum_resources:
         return
 
-    if sum_a > sum_b:
-        table.b.append(sum_a - sum_b)
+    if sum_needs > sum_resources:
+        new_resources = table.resources
+        new_resources.append(sum_needs - sum_resources)
+        table.resources = new_resources
     else:
-        table.a.append(sum_b - sum_a)
+        new_needs = table.needs
+        new_needs.append(sum_resources - sum_needs)
+        table.needs = new_needs
 
 
-def north_west_corner(table: SolutionTable) -> None:
-    a = table.a.copy()
-    b = table.b.copy()
+def north_west_corner(table: Table) -> None:
+    needs = table.needs
+    resources = table.resources
 
     for i in range(table.rows):
-        j = 0
-        while a[i] != 0:
-            delta = a[i] - b[j]
+        for j in range(table.columns):
+            item = table.costs[i][j]
+            if resources[i] == 0 or needs[j] == 0:
+                continue
 
-            if delta >= 0:
-                if b[j] != 0:
-                    table.solution[i][j].amount = b[j]
-                a[i] = delta
-                b[j] = 0
+            if resources[i] > needs[j]:
+                item.amount = needs[j]
+                resources[i] -= needs[j]
+                needs[j] = 0
             else:
-                table.solution[i][j].amount = a[i]
-                b[j] = abs(delta)
-                a[i] = 0
-
-            j += 1
-
-    def get_neighbors(
-            cell: ItemSolutionTable,
-            solution_as_list: list[ItemSolutionTable]
-    ) -> list[ItemSolutionTable]:
-
-        neighbors = [ItemSolutionTable(-1, -1, None), ItemSolutionTable(-1, -1, None)]
-        for item in solution_as_list:
-            if item != cell:
-
-                if neighbors[0].amount is not None and neighbors[1].amount is not None:
-                    break
-
-                if item.row == cell.row and neighbors[0].amount is None:
-                    neighbors[0] = item
-                elif item.column == cell.column and neighbors[1].amount is None:
-                    neighbors[1] = item
-
-        return neighbors.copy()
+                item.amount = resources[i]
+                needs[j] -= resources[i]
+                resources[i] = 0
 
 
+def calculate_minimal_cost(table: Table) -> int:
+    """
+    Расчет минимальной стоимости
+
+    :param table:
+    :return:
+    """
+    return sum(
+        item.cost * item.amount for row in table.costs for item in row if item.amount is not None
+    )
 
 
 def get_solution(a: list[int], b: list[int], c: list[list[int]]) -> list[list[int | None]]:
-    ...
+    balance_table(table := Table(a, b, c))
+    north_west_corner(table)
+    return table.as_list()
