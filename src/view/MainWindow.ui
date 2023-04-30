@@ -17,12 +17,22 @@
    <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
      <widget class="QGroupBox" name="inputBox">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="title">
        <string>Входные данные</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QGroupBox" name="initSizeBox">
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true"/>
          </property>
@@ -35,7 +45,7 @@
             <item>
              <widget class="QLabel" name="label">
               <property name="text">
-               <string>Ширина: </string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ширина:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
              </widget>
             </item>
@@ -62,7 +72,7 @@
             <item>
              <widget class="QLabel" name="label_2">
               <property name="text">
-               <string>Высота:  </string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Высота:  &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
              </widget>
             </item>
@@ -82,6 +92,22 @@
               </property>
              </spacer>
             </item>
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/JKearnsl/transport_task&quot;&gt;&lt;span style=&quot; color:#2980b9;&quot;&gt;GitHub &lt;/span&gt;&lt;/a&gt;2023&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::RichText</enum>
+              </property>
+              <property name="openExternalLinks">
+               <bool>true</bool>
+              </property>
+              <property name="textInteractionFlags">
+               <set>Qt::TextBrowserInteraction</set>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>
@@ -95,12 +121,29 @@
     </item>
     <item>
      <widget class="QGroupBox" name="outputBox">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="title">
        <string>Выходные данные</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QTableView" name="outputTable"/>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="consoleArea">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
