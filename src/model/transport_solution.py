@@ -26,8 +26,8 @@ class TransportSolutionModel:
         self._matrix: list[list[int]] = []
 
         self._input_table: list[list[int | None]] = [[None]]
-        self._can_solve = False
         self._solution: list[list[int | None]] = [[None]]
+        self._console_output: str = ''
 
         # список наблюдателей
         self._mObservers = []
@@ -56,10 +56,18 @@ class TransportSolutionModel:
 
         :return:
         """
-        if self._can_solve:
-            self._solution = get_solution(self._a, self._b, self._matrix)
 
         return self._solution
+
+    @property
+    def console_output(self):
+        """
+        Выходное решение
+
+        :return:
+        """
+
+        return self._console_output
 
     @input_table.setter
     def input_table(self, value: list[list[str | None]]):
@@ -70,21 +78,24 @@ class TransportSolutionModel:
         self._a = []
         self._matrix = []
 
-        self._can_solve = True
+        can_solve = True
         for el in value[1:]:
             self._a.append(el[0])
             self._matrix.append(el[1:])
             if None in el[1:]:
-                self._can_solve = False
+                can_solve = False
         if None in self._b or len(self._b) == 0:
-            self._can_solve = False
+            can_solve = False
         if None in self._a or len(self._a) == 0:
-            self._can_solve = False
+            can_solve = False
 
-        if not self._can_solve:
+        if not can_solve:
             self._solution = []
             for i in range(self._height):
                 self._solution.append([None for _ in range(self._width)])
+
+        if can_solve:
+            self._solution, self._console_output = get_solution(self._a, self._b, self._matrix)
 
         self.notify_observers()
 

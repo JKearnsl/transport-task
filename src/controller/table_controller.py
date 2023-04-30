@@ -30,8 +30,8 @@ class TableController():
     def resize_table(self):
         model = self.view.ui.inputTable.model()
 
-        width = self.view.ui.tableWidth.value()
-        height = self.view.ui.tableHeight.value()
+        width = self.view.ui.tableWidth.value() + 1
+        height = self.view.ui.tableHeight.value() + 1
 
         if self.model.height != height:
             self.model.height = height

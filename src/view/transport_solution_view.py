@@ -29,8 +29,8 @@ class TransportSolutionView(QMainWindow, TransportSolutionDObserver, metaclass=T
         self.ui.outputTable.model().setVerticalHeaderLabels([" "])
         self.ui.inputTable.setColumnWidth(0, 50)
         self.ui.outputTable.setColumnWidth(0, 50)
-        self.ui.tableWidth.setMinimum(1)
-        self.ui.tableHeight.setMinimum(1)
+        self.ui.tableWidth.setMinimum(0)
+        self.ui.tableHeight.setMinimum(0)
 
         # Регистрация представлений
         self.model.add_observer(self)
@@ -112,3 +112,6 @@ class TransportSolutionView(QMainWindow, TransportSolutionDObserver, metaclass=T
         self.ui.outputTable.model().setVerticalHeaderLabels(output_vertical_header)
 
         self.ui.inputTable.model().itemChanged.connect(self.controller.input_table)
+
+        self.ui.consoleArea.clear()
+        self.ui.consoleArea.setHtml(self.model.console_output)
