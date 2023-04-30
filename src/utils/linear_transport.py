@@ -73,7 +73,7 @@ class Table:
     def costs(self, value):
         self._costs = value
 
-    def as_list(self) -> list[list[int | None]]:
+    def as_matrix(self) -> list[list[int | None]]:
         return [
             [None, *self._needs],
             *[
@@ -320,4 +320,4 @@ def get_solution(a: list[int], b: list[int], c: list[list[int]]) -> tuple[list[l
     #     console_output.append(f" > Fmin = {calculate_minimal_cost(new_table)}<br/>")
     #     count += 1
 
-    return table.as_list(), '<br/>'.join(console_output)
+    return table.as_matrix(), '<br/>'.join(console_output)
