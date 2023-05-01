@@ -11,8 +11,8 @@ from src.model.transport_solution.utils import is_degenerate
 from src.model.transport_solution.utils import remove_degenerate
 from src.model.transport_solution.utils import table_to_html
 
-from src.utils.translators import from_fraction_to_float
-from src.utils.validators import is_fractional, is_float
+from model.transport_solution.translators import from_fraction_to_float
+from model.transport_solution.validators import is_fractional, is_float
 
 
 class TransportSolutionModel:
