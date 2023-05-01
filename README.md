@@ -11,7 +11,7 @@
 
 ### Интерфейс
 
-...
+![Screenshot_20230501_125235](https://user-images.githubusercontent.com/76239707/235437386-97d9a2e2-6a55-4e3e-8220-04a8b56acb01.png)
 
 ### Сборка
 
