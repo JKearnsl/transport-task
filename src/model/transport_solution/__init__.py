@@ -115,11 +115,10 @@ class TransportSolutionModel:
             console_output.append(f"Расчет стоимости опорного плана:<br/>")
             console_output.append(f" > F = {calculate_minimal_cost(table)}<br/>")
 
-            table2 = copy.deepcopy(table)
-            if is_degenerate(table2):
+            if is_degenerate(table):
                 console_output.append("Таблица вырождена<br/>Добавляем нулевые элементы")
-                remove_degenerate(table2)
-                console_output.append(f'{table_to_html(table2, item=lambda t, r, c: t.items[r][c].amount)}<br/>')
+                remove_degenerate(table)
+                console_output.append(f'{table_to_html(table, item=lambda t, r, c: t.items[r][c].amount)}<br/>')
             else:
                 console_output.append(f"Таблица не вырождена<br/>")
 
