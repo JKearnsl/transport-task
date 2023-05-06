@@ -86,7 +86,7 @@ class Table:
 
 
 class ItemTable:
-    def __init__(self, row: int, column: int, cost: int | float = -1, amount: int | float = None):
+    def __init__(self, row: int, column: int, cost: int | float = -1, amount: int = None):
         self._row = row
         self._column = column
         self._amount = amount
@@ -102,7 +102,7 @@ class ItemTable:
         return self._column
 
     @property
-    def amount(self) -> int:
+    def amount(self) -> int | None:
         return self._amount
 
     @property
