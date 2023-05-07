@@ -77,7 +77,7 @@ def potential_method(table: Table) -> bool:
                 if item.amount == 0:
                     if not min_zero:
                         min_zero = item
-                    elif item.cost > min_zero.cost:
+                    elif item.cost >= min_zero.cost:
                         min_zero = item
 
         if min_zero is not None:
