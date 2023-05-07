@@ -123,11 +123,11 @@ class TransportSolutionModel:
                 console_output.append(f"Таблица не вырождена<br/>")
 
             new_table = copy.deepcopy(table)
-            count = 0
+            count = 1
             while potential_method(new_table):
                 remove_degenerate(new_table)
                 console_output.append(f"<br/> Оптимизация плана методом потенциалов Шаг {count}:")
-                console_output.append(f"<br/> {table_to_html(new_table, item=lambda t, r, c: t.items[r][c].amount)}")
+                console_output.append(f"{table_to_html(new_table, item=lambda t, r, c: t.items[r][c].amount)}")
                 console_output.append(f" > Fmin = {int(calculate_minimal_cost(new_table))}<br/>")
                 count += 1
                 if count > 20:
