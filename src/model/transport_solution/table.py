@@ -48,7 +48,7 @@ class Table:
 
         delta = len(value) - len(self._resources)
         for i in range(delta):
-            self._items.append([ItemTable(self.rows + i, j, cost=0) for j in range(self.columns)])
+            self._items.append([ItemTable(self.rows + i, j) for j in range(self.columns)])
         self._resources = value.copy()
 
     @needs.setter
@@ -58,7 +58,7 @@ class Table:
 
         delta = len(value) - len(self._needs)
         for i, row in enumerate(self._items):
-            row.extend([ItemTable(i, self.columns + j, cost=0) for j in range(delta)])
+            row.extend([ItemTable(i, self.columns + j) for j in range(delta)])
         self._needs = value.copy()
 
     @items.setter
@@ -86,7 +86,7 @@ class Table:
 
 
 class ItemTable:
-    def __init__(self, row: int, column: int, cost: int | float = -1, amount: int = None):
+    def __init__(self, row: int, column: int, cost: int | float = 0, amount: int = None):
         self._row = row
         self._column = column
         self._amount = amount

@@ -84,7 +84,7 @@ def get_cycle(start_item: ItemTable, table: Table) -> list[ItemTable]:
 
     cycle = []
     for i in range(len(path)):
-        cycle.append(ItemTable(-1, -1, -1, None))
+        cycle.append(ItemTable(-1, -1))
     previous_item = start_item
     for i in range(len(cycle)):
         cycle[i] = previous_item

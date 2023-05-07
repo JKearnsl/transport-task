@@ -122,11 +122,13 @@ class TransportSolutionModel:
             else:
                 console_output.append(f"Таблица не вырождена<br/>")
 
+            new_table = copy.deepcopy(table)
             count = 0
-            while potential_method(table):
+            while potential_method(new_table):
+                remove_degenerate(new_table)
                 console_output.append(f"<br/> Оптимизация плана методом потенциалов Шаг {count}:")
-                console_output.append(f"<br/> {table_to_html(table, item=lambda t, r, c: t.items[r][c].amount)}")
-                console_output.append(f" > Fmin = {int(calculate_minimal_cost(table))}<br/>")
+                console_output.append(f"<br/> {table_to_html(new_table, item=lambda t, r, c: t.items[r][c].amount)}")
+                console_output.append(f" > Fmin = {int(calculate_minimal_cost(new_table))}<br/>")
                 count += 1
                 if count > 20:
                     console_output.append(f" > Превышено количество итераций<br/>")
